@@ -2,28 +2,15 @@
 
 (require "util.rkt")
 
-(define (neighbors p)
-  (append* 
-    (for/list ([dx (in-range -1 2)])
-      (for/list ([dy (in-range -1 2)]
-                #:unless (and (= dx 0) (= dy 0)))
-        (cons (+ (car p) dx) (+ (cdr p) dy))))))
-
-(define (read-grid input)
-  (define (add next acc)
-    (foldl (lambda (n map) (set-add map n)) acc next))
-  (foldl add (set)
-    (for/list ([y (in-naturals)]
-               [line (lines input)])
-      (for/list ([x (in-naturals)]
-                 [c line]
-                 #:when (char=? c #\@))
-        (cons x  y)))))
+(define (read-map input)
+  (list->set
+    (map car
+      (filter (λ (v) (char=? #\@ (cdr v))) (read-grid input)))))
 
 (define (find-accessible rolls)
   (define (accessible? p)
-    (let* ([ns (neighbors p)]
-           [adjacent (filter (lambda (m) (set-member? rolls m)) ns)])
+    (let* ([ns (neighbours8 p)]
+           [adjacent (filter (λ (m) (set-member? rolls m)) ns)])
         (< (length adjacent) 4)))
   (filter accessible? (set->list rolls)))
 
@@ -35,13 +22,12 @@
     (let ([accessible (find-accessible rolls)])
       (cond [(null? rolls) rolls]
             [(null? accessible) rolls]
-            [else
-             (remove-accessible
-                (foldl (lambda (next acc) (set-remove acc next)) rolls accessible))])))
+            [else (remove-accessible
+                    (foldl (flip set-remove) rolls accessible))])))
   (- (set-count rolls) (set-count (remove-accessible rolls))))
 
 (define (go input)
-  (let ([rolls (read-grid input)])
+  (let ([rolls (read-map input)])
     (begin
         (printf "Part 1:~n")
         (printf "~a~n" (solve1 rolls))
