@@ -1,5 +1,6 @@
 #lang racket
 
+(require threading)
 (require "util.rkt")
 
 ; converts columns to rows: first column becomes first row, etc.
@@ -28,9 +29,15 @@
                  [operands (map string->number (cons (string-trim opd) ls))])
       (apply (get-op op) operands)))
   ; transpose the entire input, then split on blank lines to construct the problems
-  (let* ([input-c (map string->list (lines input))]
-         [transposed-problems (string-join (map string-trim (map list->string (transpose input-c))) "\n")]
-         [problems (map lines (string-split transposed-problems "\n\n"))])
+  (let ([problems (~> input
+                      lines
+                      (map string->list _)
+                      transpose
+                      (map list->string _)
+                      (map string-trim _) ; we trim here to make the split on blank lines simpler
+                      (string-join _ "\n")
+                      (string-split _ "\n\n")
+                      (map lines _))])
     (sum (map calc problems))))
 
 (define (go input)
