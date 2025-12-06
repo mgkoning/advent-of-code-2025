@@ -1,6 +1,6 @@
 #lang racket
 
-(provide read-input lines neighbours8 read-grid sum flip)
+(provide read-input lines neighbours8 read-grid sum flip string-split-at)
 
 (define (read-input file-name)
   (let ([file (open-input-file (string-append-immutable "../input/" file-name))])
@@ -31,3 +31,6 @@
 
 (define (flip proc)
   (λ (a b) (proc b a)))
+
+(define (string-split-at s p)
+  (cons (substring s 0 p) (substring s p)))
