@@ -1,8 +1,10 @@
 #lang racket
 
-(provide read-input lines coord left right neighbours8 read-grid sum flip string-split-at partial2)
+(provide read-input lines coord coord3 left right neighbours8 read-grid sum flip string-split-at partial2)
 
 (struct coord (x y) #:transparent)
+
+(struct coord3 (x y z) #:transparent)
 
 (define/match (add-coord a b)
   [((coord xa ya) (coord xb yb)) (coord (+ xa xb) (+ ya yb))])
