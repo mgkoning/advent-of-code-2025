@@ -7,3 +7,4 @@ compiled/
 .\#*
 
 input/day*.txt
+racket/canvas.html

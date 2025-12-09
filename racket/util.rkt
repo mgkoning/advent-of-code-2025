@@ -1,6 +1,9 @@
 #lang racket
 
-(provide read-input lines coord coord3 left right neighbours8 read-grid sum flip string-split-at partial2)
+(provide
+  read-input lines
+  coord coord3 left right neighbours8
+  read-grid sum flip string-split-at partial2 pairs)
 
 (struct coord (x y) #:transparent)
 
@@ -49,3 +52,9 @@
 ;; partial application of a 2-arity function
 (define (partial2 fn a)
   (λ (b) (fn a b)))
+
+(define/match (pairs lst)
+  [((list)) (list)]
+  [((list _)) (list)]
+  [((list a b)) (list (cons a b))]
+  [((list-rest x xs)) (append (map (λ (y) (cons x y)) xs) (pairs xs))])
