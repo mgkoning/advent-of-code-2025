@@ -8,3 +8,5 @@ compiled/
 
 input/day*.txt
 racket/canvas.html
+day11*.svg
+day11*.dot

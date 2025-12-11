@@ -1,7 +1,7 @@
 #lang racket
 
 (provide
-  read-input lines
+  read-input lines enumerate
   coord coord3 left right neighbours8
   read-grid sum flip string-split-at partial2 pairs)
 
@@ -40,6 +40,11 @@
       (for/list ([x (in-naturals)]
                  [c line])
         (cons (coord x y) c)))))
+
+(define (enumerate lst)
+  (for/list ([i (in-naturals)]
+             [v lst])
+    (cons i v)))
 
 (define (sum lst) (foldl + 0 lst))
 
